@@ -1,16 +1,17 @@
 import cv2
 import sys
+import numpy as np
 
-
-cascPath = ("C:\Users\Jonathan Yancey.DESKTOP-F2GU005\Documents\GitHub\Webcam-Face-Detect-master\Webcam-Face-Detect-master\haarcascade_frontalface_default.xml")
+# Starting arguments and definitions
+cascPath = ('haarcascade_frontalface_default.xml')
 faceCascade = cv2.CascadeClassifier(cascPath)
-
+myface = 0
 video_capture = cv2.VideoCapture(0)
 t = 0
+
 while True:
     # Capture frame-by-frame
     ret, frame = video_capture.read()
-
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
     faces = faceCascade.detectMultiScale(
@@ -31,9 +32,22 @@ while True:
             xset = x  
             hset = h
             wset = w
-   
-   # Put logo in ROI and modify the main image
-    frame[y:y+hset, x:x+wset] = myface
+        w = w
+        h = h
+
+    # Scale the original face image to fit the area of the detect face for each frame
+    if np.any(myface) != 0: 
+        myfacer = cv2.resize(
+            myface,
+            (w, h), 
+            myface,
+            fx = 0,
+            fy = 0,
+            interpolation = cv2.INTER_NEAREST
+        )
+ 
+    # Put the first detected face in ROI and modify the main image        
+        frame[y:y+h, x:x+w] = myfacer
    
 
 
